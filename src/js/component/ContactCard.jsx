@@ -47,6 +47,7 @@ export const ContactCard = () => {
     
     return (
         <div>
+            {showModal && <div className="modal-backdrop fade show"></div>}
             <div className={`modal fade ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog" style={{ display: showModal ? 'block' : 'none' }}>
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
@@ -74,7 +75,7 @@ export const ContactCard = () => {
                 <div>
                     <div>
                         <ul>
-                            {store.contacts.map((item, index) => {
+                            {store.contacts.slice(0).reverse().map((item, index) => {
                                 return (
                                     <div key={index} className="card container">
                                         <li className="d-flex justify-content-between">
