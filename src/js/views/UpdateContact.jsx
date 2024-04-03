@@ -1,18 +1,48 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Context } from '../store/appContext';
 
-
-export const AddContact = () => {
-    const { actions } = React.useContext(Context);
-    const [formData, setFormData] = useState({
-        name: '',
-        address: '',
-        phone: '',
-        email: ''
-    });
-
+export const UpdateContact = () => {
+    const { actions, store } = React.useContext(Context);
+    const { contactId } = useParams(); // Obtener el ID del contacto de los parámetros de la URL
     const navigate = useNavigate();
+
+    const [formData, setFormData] = useState(() => {
+        const contactToUpdate = store.contacts.find(contact => contact.id == contactId);
+        console.log(contactToUpdate)
+        console.log(store.contacts)
+        if (contactToUpdate) {
+            return {
+                name: contactToUpdate.name,
+                address: contactToUpdate.address,
+                phone: contactToUpdate.phone,
+                email: contactToUpdate.email
+            };
+        } else {
+            return {
+                name: '',
+                address: '',
+                phone: '',
+                email: ''
+            };
+        }
+    });
+    
+
+    
+    // useEffect(() => {
+    //     actions.loadContactsData();
+    //     const contactToUpdate = store.contacts.find(contact => contact.id === contactId);
+    //     if (contactToUpdate) {
+    //         setFormData({
+    //             name: contactToUpdate.name,
+    //             address: contactToUpdate.address,
+    //             phone: contactToUpdate.phone,
+    //             email: contactToUpdate.email
+    //         });
+    //     }
+    // }, [contactId, store.contacts]);
+
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -25,27 +55,26 @@ export const AddContact = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            const response = await fetch('https://playground.4geeks.com/contact/agendas/Daniel1/contacts', {
-                method: 'POST',
+            const response = await fetch(`https://playground.4geeks.com/contact/agendas/Daniel1/contacts/${contactId}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
             });
             if (!response.ok) {
-                throw new Error('Failed to add contact');
-            };
+                throw new Error('Failed to update contact');
+            }
             await actions.loadContactsData();
             navigate('/');
-
         } catch (error) {
-            console.error('Error adding contact:', error);
+            console.error('Error updating contact:', error);
         }
     };
 
     return (
         <div className="container card mt-4 w-50">
-            <h1 className="pt-2 px-2">Add New contact</h1>
+            <h1 className="pt-2 px-2">Update Contact</h1>
             <form className="px-2" onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="FullName" className="form-label">
@@ -105,7 +134,7 @@ export const AddContact = () => {
                 </div>
 
                 <button type="submit" className="btn btn-primary">
-                    Create Contact
+                    Update Contact
                 </button>
             </form>
             <Link to={'/'} className="mt-2 pb-2 px-2">
