@@ -1,7 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
+
 import rigoImage from "../../img/rigo-baby.jpg";
+
 import { FaPencilAlt } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";

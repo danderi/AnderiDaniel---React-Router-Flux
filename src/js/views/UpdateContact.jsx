@@ -9,8 +9,8 @@ export const UpdateContact = () => {
 
     const [formData, setFormData] = useState(() => {
         const contactToUpdate = store.contacts.find(contact => contact.id == contactId);
-        console.log(contactToUpdate)
-        console.log(store.contacts)
+        console.log(contactToUpdate);
+        console.log(contactId);
         if (contactToUpdate) {
             return {
                 name: contactToUpdate.name,
@@ -26,6 +26,7 @@ export const UpdateContact = () => {
                 email: ''
             };
         }
+        
     });
     
 
